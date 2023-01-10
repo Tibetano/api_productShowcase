@@ -1,10 +1,10 @@
-const { json } = require('express')
 const express = require('express')
 const DB = require('./database')
 
 const app = express()
 
 const port = 3000
+
 
 app.use(express.json())
 

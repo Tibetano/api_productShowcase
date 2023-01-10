@@ -12,6 +12,10 @@ router.post('/register', async (req, res) => {
         return res.status(400).json({error: "CPF já cadastrado!"})
     }
 
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(req.body.password, salt)
+    req.body.password = hash
+
     try {
         await User.create(req.body)
         console.log(email)
@@ -32,7 +36,10 @@ router.post('/authenticate', async (req, res) => {
         return res.status(400).json({error: "Usuario não encontrado"})
     }
 
-    if(req.body.password === user.password){
+    console.log(req.body.password)
+    console.log(user.password)
+
+    if(await bcrypt.compare(req.body.password, user.password)){
         res.status(200).json({ok: true})
     } else{
         res.status(200).json({ok: false})
