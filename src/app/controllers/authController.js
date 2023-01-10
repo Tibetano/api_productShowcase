@@ -12,15 +12,11 @@ router.post('/register', async (req, res) => {
         return res.status(400).json({error: "CPF já cadastrado!"})
     }
 
-    const salt = await bcrypt.genSalt(10)
-    const hash = await bcrypt.hash(req.body.password, salt)
-    req.body.password = hash
-
     try {
         await User.create(req.body)
         console.log(email)
     } catch (error) {
-        console.log(`Erro: ${error}`)
+        console.log("Erro na criação do usuário")
     }
     
     req.body.password = undefined
