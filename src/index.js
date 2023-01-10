@@ -8,13 +8,12 @@ const app = express()
 const port = 3000
 
 
-app.get('/', (req, res) => {
-    return res.json({ OK: true })
-})
-
+require('./app/controllers/authController')(app)
 
 
 
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`)
 })
+
+

@@ -3,25 +3,13 @@ const express = require('express')
 const router = express.Router()
 
 
-router.post('/', (req, res) => {
-    res.status(200).json({})
+router.post('/register', (req, res) => {
+    res.status(200).json({ok: true})
 })
 
-router.put('/', (req, res) => {
-    res.status(200).json({})
-})
-
-router.delete('/', (req, res) => {
-    res.status(200).json({})
-})
-
-router.get('/', (req, res) => {
-    res.status(200).json({})
-})
-
-router.get('/', (req, res) => {
-    res.status(200).json({})
+router.put('/authenticate', (req, res) => {
+    res.status(200).json({ok: true})
 })
 
 
-
+module.exports = app => app.use('/auth', router)
