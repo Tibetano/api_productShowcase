@@ -6,42 +6,37 @@ router.post('/register', async (req, res) => {
 
     const {email, cpf} = req.body
 
-    if(await User.findOne({email}) ){
-        return res.status(400).json({error: "email já cadastrado!"})
-    } else if (await User.findOne({cpf})){
-        return res.status(400).json({error: "CPF já cadastrado!"})
-    }
-
     try {
-        await User.create(req.body)
-        console.log(email)
+        if(await User.findOne({email}) ){
+            return res.status(400).json({error: "email já cadastrado!"})
+        } else if (await User.findOne({cpf})){
+            return res.status(400).json({error: "CPF já cadastrado!"})
+        }
+        user = await User.create(req.body)
     } catch (error) {
         console.log("Erro na criação do usuário")
     }
     
-    req.body.password = undefined
-    res.status(200).json(req.body)
+    user.password = undefined
+    res.status(200).json({user})
 })
 
 router.post('/authenticate', async (req, res) => {
 
     const {email} = req.body
-    const user = await User.findOne({email})
+    const user = await User.findOne({email}).select('+password')
 
     if(!user){
         return res.status(400).json({error: "Usuario não encontrado"})
     }
 
-    console.log(req.body.password)
-    console.log(user.password)
-
     if(await bcrypt.compare(req.body.password, user.password)){
-        res.status(200).json({ok: true})
-    } else{
-        res.status(200).json({ok: false})
-    }
 
-    
+        user.password = undefined
+        res.status(200).json(user)
+    } else{
+        res.status(400).json({ok: false})
+    }
 })
 
 
