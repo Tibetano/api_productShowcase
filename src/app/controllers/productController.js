@@ -7,7 +7,7 @@ const authMiddleware = require('../middlewares/auth')
 
 router.use(authMiddleware)
 
-router.post('/register', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const product = {...req.body, user: req.userId}
         await Product.create(product)
