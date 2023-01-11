@@ -26,7 +26,15 @@ router.delete('/:productId', async (req, res) => {
 })
 
 router.get('/:productId', async (req, res) => {
-    return res.status(200).json({product})
+    const {productId} = req.params
+
+    const product = await Product.findById(productId)
+
+    if(!product){
+        return res.status(400).json({error: "Produto não encontrado"})
+    }
+    
+    return res.status(200).json(product)
 })
 
 router.get('/', async (req, res) => {
