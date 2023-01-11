@@ -17,4 +17,25 @@ router.post('/register', async (req, res) => {
     }
 })
 
+router.put('/:productId', async (req, res) => {
+    return res.status(200).json({product})
+})
+
+router.delete('/:productId', async (req, res) => {
+    return res.status(200).json({product})
+})
+
+router.get('/:productId', async (req, res) => {
+    return res.status(200).json({product})
+})
+
+router.get('/', async (req, res) => {
+    try {
+        const product = await Product.find()
+        return res.status(200).json(product)
+    } catch (error) {
+        return res.status(400).json({error: "Erro ao buscar produtos"})
+    }
+})
+
 module.exports = app => app.use('/products', router)
