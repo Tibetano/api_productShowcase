@@ -18,7 +18,18 @@ router.post('/register', async (req, res) => {
 })
 
 router.put('/:productId', async (req, res) => {
-    return res.status(200).json({product})
+    const {productId} = req.params
+
+    if(!await Product.findById(productId)){
+        return res.status(400).json({message: "Produto não encontrado"})
+    }
+
+    try {
+        product = await Product.findByIdAndUpdate(productId, req.body, {new: true})
+        return res.status(200).json(product)
+    } catch (error) {
+        return res.status(400).json({error: "Erro ao excluir produto"})
+    }
 })
 
 router.delete('/:productId', async (req, res) => {
