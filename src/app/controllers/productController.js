@@ -22,7 +22,14 @@ router.put('/:productId', async (req, res) => {
 })
 
 router.delete('/:productId', async (req, res) => {
-    return res.status(200).json({product})
+    const {productId} = req.params
+
+    try {
+        await Product.findByIdAndDelete(productId)
+        return res.status(200).json({message: "Produto deletado com sucesso"})
+    } catch (error) {
+        return res.status(400).json({error: "Erro ao excluir produto"})
+    }
 })
 
 router.get('/:productId', async (req, res) => {
