@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 function generateJWT(params = {}){
-    return jwt.sign(params, process.env.HASH_PASSWORD, {expiresIn: 60*10})
+    return jwt.sign(params, process.env.HASH_PASSWORD, {expiresIn: 60*100})
 }
 
 router.post('/register', async (req, res) => {
