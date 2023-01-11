@@ -1,6 +1,13 @@
 const router = require('express').Router()
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+
+require('dotenv').config()
+
+function generateJWT(params = {}){
+    return jwt.sign(params, process.env.HASH_PASSWORD, {expiresIn: 60*10})
+}
 
 router.post('/register', async (req, res) => {
 
@@ -18,7 +25,7 @@ router.post('/register', async (req, res) => {
     }
     
     user.password = undefined
-    res.status(200).json({user})
+    res.status(200).json({user, token: generateJWT({id: user.id})})
 })
 
 router.post('/authenticate', async (req, res) => {
@@ -31,13 +38,11 @@ router.post('/authenticate', async (req, res) => {
     }
 
     if(await bcrypt.compare(req.body.password, user.password)){
-
         user.password = undefined
-        res.status(200).json(user)
+        res.status(200).json({user, token: generateJWT({id: user.id})})
     } else{
         res.status(400).json({ok: false})
     }
 })
-
 
 module.exports = app => app.use('/auth', router)
